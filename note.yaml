@@ -1,0 +1,48 @@
+Trip Owner
+   |
+   |  Invite (email / userId / link)
+   v
+TripInvite (PENDING)
+   |
+   |------------------------------|
+   |                              |
+User accepts                  User declines / expires
+   |                              |
+   v                              v
+Create Participant           InviteStatus = DECLINED / EXPIRED
+Link userId (optional)
+
+---details---
+[1] Owner clicks "Invite"
+        |
+        v
+[2] Create TripInvite
+    - tripId
+    - invitedBy (owner userId)
+    - invitedUser OR invitedEmail
+    - status = PENDING
+        |
+        v
+[3] Invite appears in:
+    - Pending Invitations screen
+    - Invite link / email
+        |
+        v
+[4] Invitee opens invite
+        |
+        |-- not logged in --> [Login / Create User]
+        |
+        v
+[5] Invitee chooses:
+    |-- Accept
+    |     |
+    |     v
+    |  Create Participant
+    |  - userId
+    |  - snapshot name/avatar
+    |  Update Invite → ACCEPTED
+    |
+    |-- Decline
+          |
+          v
+       Update Invite → DECLINED
