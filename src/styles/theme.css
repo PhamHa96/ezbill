@@ -19,16 +19,21 @@
 }
 
 .dark {
-  --text-primary: #f5f5f5;
-  --text-secondary: #d1d5db;
-  --text-muted: #9ca3af;
-  --text-inverse: #111827;
+  --text-primary: #f5eeff;
+  --text-secondary: #c8b8d8;
+  --text-muted: #8b7da0;
+  --text-inverse: #0f0a18;
 
-  --surface-page: #0f0f14;
-  --surface-card: #1a1a22;
-  --surface-elevated: #23232e;
+  --surface-page: #120b1a;
+  --surface-card: #1e1228;
+  --surface-elevated: #2a1839;
 
-  --accent-primary: #ff8fb3;
+  --accent-primary: #ff7da1;
   --accent-secondary: #ffb3c8;
-  --accent-soft: #3a1f2a;
+  --accent-soft: #3a1f2e;
+
+  --status-success: #4ade80;
+  --status-warning: #fbbf24;
+  --status-error: #f87171;
+  --status-info: #38bdf8;
 }

@@ -6,6 +6,8 @@ html,
 body,
 #root {
   height: 100%;
+  color: var(--text-primary);
+  background-color: var(--surface-page);
 }
 
 .pt-safe {
@@ -19,9 +21,6 @@ body,
 }
 .text-primary {
   color: var(--text-primary);
-}
-.text-text-muted {
-  color: var(--text-muted);
 }
 .text-success {
   color: var(--status-success);
@@ -44,4 +43,20 @@ body,
 .border-primary {
   border-color: #ff85a1;
   color: #ff85a1;
+}
+/* text color utilities — explicit CSS ensures they work in Tailwind v4 */
+.text-text-main     { color: var(--text-primary); }
+.text-text-primary  { color: var(--text-primary); }
+.text-text-secondary{ color: var(--text-secondary); }
+.text-text-muted    { color: var(--text-muted); }
+.text-text-inverse  { color: var(--text-inverse); }
+
+/* surface background utilities */
+.bg-surface-card     { background-color: var(--surface-card); }
+.bg-surface-elevated { background-color: var(--surface-elevated); }
+.save-ex-btn {
+    margin-bottom: 3.5rem;
+}
+.btn-arrow-forward {
+  font-size: 15px !important;
 }

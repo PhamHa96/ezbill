@@ -29,7 +29,7 @@ export interface Participant extends SplitBase {
   avatarUrl?: string;
 }
 
-export interface ItemSplit extends SplitBase {}
+export type ItemSplit = SplitBase
 
 export interface BillItem {
   id: string;

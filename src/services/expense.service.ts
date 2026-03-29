@@ -227,10 +227,3 @@ export class SettlementCalculator {
     return settlements;
   }
 }
-// Example usage:
-// const balances = trip.calculateTripBalance();
-// const settlements = SettlementCalculator.settle(balances);
-// [
-//   { from: "B", to: "A", amount: 150 },
-//   { from: "C", to: "A", amount: 150 }
-// ]

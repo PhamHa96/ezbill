@@ -19,6 +19,7 @@ export interface AuthState {
   login: (user: AuthUser) => Promise<void>;
   logout: () => Promise<void>;
   hydrate: () => Promise<void>;
+  updateUser: (patch: Partial<AuthUser>) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -34,6 +35,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: async () => {
     await storage.remove(AUTH_KEY);
     set({ user: null, isLoggedIn: false });
+  },
+
+  updateUser: async (patch) => {
+    const current = useAuthStore.getState().user;
+    if (!current) return;
+    const updated = { ...current, ...patch };
+    await storage.set(AUTH_KEY, JSON.stringify(updated));
+    set({ user: updated });
   },
 
   hydrate: async () => {

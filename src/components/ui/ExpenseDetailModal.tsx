@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { fmt } from '../../utils/helper';
+import { useFmt } from '../../hooks/useFmt';
 import type { Expense } from '../../services/expense.model';
 import { exportExpenseToPDF, shareExpense } from '../../services/pdf.service';
 
@@ -9,6 +9,7 @@ interface ExpenseDetailModalProps {
 }
 
 export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({ expense, onClose }) => {
+  const fmt = useFmt();
   const [sharing, setSharing] = useState(false);
   const [exporting, setExporting] = useState(false);
 
@@ -40,14 +41,11 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({ expense,
        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in" onClick={onClose} />
 
        {/* Sheet */}
-       <div className="relative bg-surface-page rounded-t-[32px] w-full max-h-[90vh] flex flex-col pt-2 pb-safe animate-in slide-in-from-bottom-full duration-300">
+       <div className="relative bg-surface-page rounded-t-[32px] w-full max-h-[90vh] flex flex-col pt-2 pb-safe animate-in slide-in-from-bottom-full duration-600">
           <div className="w-12 h-1.5 bg-secondary/20 rounded-full mx-auto mb-6 mt-3 shrink-0" />
 
           <div className="px-6 flex-1 overflow-y-auto pb-10">
-             <div className="flex flex-col items-center text-center mb-6">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary text-3xl mb-4">
-                  <span className="material-symbols-outlined">{expense.type === 'BILL' ? 'receipt_long' : 'notes'}</span>
-                </div>
+             <div className="flex flex-col items-center text-center mb-3">
                 <h2 className="text-2xl font-extrabold text-text-main leading-tight mb-1">
                   {expense.description}
                 </h2>
@@ -55,7 +53,7 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({ expense,
                   <span className="material-symbols-outlined text-[14px]">calendar_today</span>
                   {new Date(expense.createdAt || '').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                 </div>
-                <p className="text-4xl font-black text-primary">{fmt(expense.totalAmount)}</p>
+                <p className="text-2xl font-black text-primary">{fmt(expense.totalAmount)}</p>
              </div>
 
              {/* Action Buttons */}
@@ -79,10 +77,10 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({ expense,
              </div>
 
              {/* Payer Info */}
-             <div className="bg-white rounded-3xl p-4 shadow-sm border border-secondary/10 flex items-center gap-4 mb-6 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-green-50 rounded-bl-full -z-0" />
+             <div className="bg-surface-card rounded-3xl p-4 shadow-sm border border-[#ffd1dc] flex items-center gap-4 mb-6 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-green-500/10 rounded-bl-full -z-0" />
                 <img src={payer?.avatarUrl} alt={payer?.name} className="w-12 h-12 rounded-full object-cover border-2 border-green-500 z-10" />
-                <div className="z-10 bg-white">
+                <div className="z-10 bg-surface-card">
                    <p className="text-[10px] uppercase font-bold text-text-muted tracking-widest mb-0.5">Paid By</p>
                    <p className="text-sm font-extrabold text-text-main flex items-center gap-1">
                      {payer?.name || 'Someone'}
@@ -93,9 +91,9 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({ expense,
 
              {/* Participants / Splits */}
              <h3 className="text-[11px] uppercase font-bold text-text-muted tracking-widest mb-3">Participants Split</h3>
-             <div className="bg-white rounded-3xl shadow-sm border border-secondary/10 overflow-hidden mb-6">
+             <div className="bg-surface-card rounded-3xl shadow-sm border border-[#ffd1dc] overflow-hidden mb-6">
                 {expense.participants.map((p, idx) => (
-                  <div key={p.userId} className={`p-4 flex items-center gap-4 ${idx !== expense.participants.length - 1 ? 'border-b border-secondary/10' : ''}`}>
+                  <div key={p.userId} className={`p-4 flex items-center gap-4 ${idx !== expense.participants.length - 1 ? 'border-b border-[#ffd1dc]' : ''}`}>
                       <img src={p.avatarUrl} alt={p.name} className="w-10 h-10 rounded-full object-cover bg-surface-page" />
                       <div className="flex-1">
                          <p className="font-bold text-text-main text-sm">{p.name}</p>
@@ -115,9 +113,9 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({ expense,
              {expense.type === 'BILL' && expense.items && expense.items.length > 0 && (
                <>
                  <h3 className="text-[11px] uppercase font-bold text-text-muted tracking-widest mb-3">Receipt Items</h3>
-                 <div className="bg-white rounded-3xl shadow-sm border border-secondary/10 overflow-hidden mb-6">
+                 <div className="bg-surface-card rounded-3xl shadow-sm border border-[#ffd1dc] overflow-hidden mb-6">
                     {expense.items.map((item, idx) => (
-                      <div key={item.id} className={`p-4 ${idx !== expense.items.length - 1 ? 'border-b border-secondary/10' : ''}`}>
+                      <div key={item.id} className={`p-4 ${idx !== expense.items.length - 1 ? 'border-b border-[#ffd1dc]' : ''}`}>
                          <div className="flex items-center justify-between mb-2">
                             <div>
                                <p className="font-bold text-text-main text-sm">{item.name}</p>

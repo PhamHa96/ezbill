@@ -1,10 +1,11 @@
 import React from 'react';
-import { fmt } from '../../utils/helper';
+import { useFmt } from '../../hooks/useFmt';
 import { useExpenseStore } from '../../stores/expenseStore';
 import { SplitType, ExpenseType } from '../../services/expense.model';
 import { Input } from '../../components/ui/Input';
 
 export const SplitOptions: React.FC = () => {
+  const fmt = useFmt();
   const { participants, totalAmount, updateParticipantSplit, payerId, setPayer, type } = useExpenseStore();
 
   // Decide what split method is globally active (or per user if we wanted to be complex)
@@ -29,7 +30,7 @@ export const SplitOptions: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-5 rounded-3xl shadow-soft mb-6">
+    <div className="bg-surface-card p-5 rounded-3xl shadow-soft mb-6">
       <h3 className="font-bold text-text-main mb-4 flex items-center gap-2">
         <span className="material-symbols-outlined text-primary text-[20px]">pie_chart</span>
         Split Options

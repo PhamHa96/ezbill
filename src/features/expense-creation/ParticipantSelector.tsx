@@ -15,7 +15,7 @@ export const ParticipantSelector: React.FC = () => {
   };
 
   return (
-    <div className="mb-6 bg-white p-5 rounded-3xl shadow-soft">
+    <div className="mb-6 bg-surface-card p-5 rounded-3xl shadow-soft">
       <h3 className="text-[11px] font-bold text-text-muted tracking-widest uppercase mb-3 block">Who is involved?</h3>
       <div className="flex items-center gap-3 overflow-x-auto pb-2">
         {participants.map(p => (
@@ -34,7 +34,7 @@ export const ParticipantSelector: React.FC = () => {
         ))}
 
         {isAdding ? (
-          <div className="flex items-center gap-2 shrink-0 border border-primary/30 rounded-full pl-4 pr-1 py-1 h-12 ml-2 bg-primary/5 mb-3">
+          <div className="flex items-center gap-2 shrink-0 border border-[#ffd1dc] rounded-full pl-4 pr-1 py-1 h-12 ml-2 bg-primary/5 mb-3">
             <input
               autoFocus
               value={name}
@@ -50,7 +50,7 @@ export const ParticipantSelector: React.FC = () => {
         ) : (
           <button
             onClick={() => setIsAdding(true)}
-            className="w-12 h-12 rounded-full border-2 border-dashed border-primary/40 text-primary flex items-center justify-center shrink-0 hover:bg-primary/10 transition-colors ml-2 mb-3"
+            className="w-12 h-12 rounded-full border-2 border-dashed border-[#ffd1dc] text-primary flex items-center justify-center shrink-0 hover:bg-primary/10 transition-colors ml-2 mb-3"
           >
             <span className="material-symbols-outlined">person_add</span>
           </button>

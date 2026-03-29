@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { fmt } from '../../utils/helper';
+import { useFmt } from '../../hooks/useFmt';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '../../lib/storage';
 import type { Trip } from '../../types';
@@ -13,6 +13,7 @@ interface SwipableTripProps {
 }
 
 const SwipableTrip: React.FC<SwipableTripProps> = ({ trip, onNavigate, onDeleteRequest }) => {
+  const fmt = useFmt();
   const [offsetX, setOffsetX] = useState(0);
   const [dragging, setDragging] = useState(false);
   const startX = useRef(0);
@@ -67,7 +68,7 @@ const SwipableTrip: React.FC<SwipableTripProps> = ({ trip, onNavigate, onDeleteR
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onClick={() => { if (!didSwipe.current) onNavigate(); didSwipe.current = false; }}
-        className="bg-white p-4 rounded-[24px] shadow-soft flex flex-col gap-3 cursor-pointer relative z-10"
+        className="bg-surface-card p-4 rounded-[24px] shadow-soft flex flex-col gap-3 cursor-pointer relative z-10"
       >
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -174,7 +175,7 @@ export const TripsListPage: React.FC = () => {
       {confirmId && tripToDelete && (
         <div className="fixed inset-0 z-[200] flex items-end justify-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setConfirmId(null)} />
-          <div className="relative bg-white rounded-t-[32px] w-full px-6 pt-6 pb-safe animate-in slide-in-from-bottom-full duration-300"
+          <div className="relative bg-surface-card rounded-t-[32px] w-full px-6 pt-6 pb-safe animate-in slide-in-from-bottom-full duration-300"
             style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}>
             <div className="w-12 h-1.5 bg-secondary/20 rounded-full mx-auto mb-6" />
             <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">

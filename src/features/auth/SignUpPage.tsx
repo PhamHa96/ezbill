@@ -59,7 +59,7 @@ export const SignUpPage: React.FC = () => {
         </div>
 
         {/* Content Card */}
-        <div className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-pink-50 relative z-20">
+        <div className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-[#ffd1dc] relative z-20">
           <div className="mb-8">
             <h1 className="text-3xl font-extrabold text-gray-700 leading-tight">
               Join the<br />
@@ -84,9 +84,9 @@ export const SignUpPage: React.FC = () => {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className="w-full bg-pink-50 border-none rounded-2xl py-3.5 pl-12 pr-4
+                  className="w-full bg-pink-50 border-2 border-transparent rounded-2xl py-3.5 pl-12 pr-4
                              text-gray-700 placeholder:text-pink-200
-                             focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                             focus:border-[#FF7DA1] outline-none transition-all font-medium"
                   placeholder="Pinky Promise"
                   type="text"
                   required
@@ -107,9 +107,9 @@ export const SignUpPage: React.FC = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full bg-pink-50 border-none rounded-2xl py-3.5 pl-12 pr-4
+                  className="w-full bg-pink-50 border-2 border-transparent rounded-2xl py-3.5 pl-12 pr-4
                              text-gray-700 placeholder:text-pink-200
-                             focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                             focus:border-[#FF7DA1] outline-none transition-all font-medium"
                   placeholder="hello@ezebill.com"
                   type="email"
                   required
@@ -130,9 +130,9 @@ export const SignUpPage: React.FC = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full bg-pink-50 border-none rounded-2xl py-3.5 pl-12 pr-12
+                  className="w-full bg-pink-50 border-2 border-transparent rounded-2xl py-3.5 pl-12 pr-12
                              text-gray-700 placeholder:text-pink-200
-                             focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                             focus:border-[#FF7DA1] outline-none transition-all font-medium"
                   placeholder="••••••••"
                   type={showPassword ? 'text' : 'password'}
                   required
@@ -160,9 +160,9 @@ export const SignUpPage: React.FC = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className="w-full bg-pink-50 border-none rounded-2xl py-3.5 pl-12 pr-4
+                  className="w-full bg-pink-50 border-2 border-transparent rounded-2xl py-3.5 pl-12 pr-4
                              text-gray-700 placeholder:text-pink-200
-                             focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                             focus:border-[#FF7DA1] outline-none transition-all font-medium"
                   placeholder="••••••••"
                   type="password"
                   required
@@ -184,7 +184,7 @@ export const SignUpPage: React.FC = () => {
           <div className="mt-8 text-center">
             <div className="relative flex items-center justify-center mb-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-pink-100"></div>
+                <div className="w-full border-t border-[#ffd1dc]"></div>
               </div>
               <span className="relative bg-white px-4 text-xs font-bold text-slate-300 uppercase tracking-widest">
                 Or sign up with
@@ -192,7 +192,7 @@ export const SignUpPage: React.FC = () => {
             </div>
 
             <div className="flex gap-4 justify-center">
-              <button className="flex-1 flex items-center justify-center gap-2 bg-white border border-pink-100
+              <button className="flex-1 flex items-center justify-center gap-2 bg-white border border-[#ffd1dc]
                                  h-14 rounded-2xl hover:bg-pink-50 transition-colors shadow-sm active:scale-95">
                 <span className="material-symbols-outlined text-[#FF7DA1] text-[20px]"
                       style={{ fontVariationSettings: "'FILL' 1" }}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { fmt } from '../../utils/helper';
+import { useFmt } from '../../hooks/useFmt';
 import { useParams, useNavigate } from 'react-router-dom';
 import { storage } from '../../lib/storage';
 import type { Trip } from '../../types';
@@ -7,6 +7,7 @@ import type { Expense } from '../../services/expense.model';
 import { calculateSettlement } from '../../utils/settlementCalculator';
 import type { Debt } from '../../utils/settlementCalculator';
 import { ExpenseDetailModal } from '../../components/ui/ExpenseDetailModal';
+import { exportTripToPDF, shareTripSummary } from '../../services/pdf.service';
 
 const SWIPE_THRESHOLD = 80;
 
@@ -18,6 +19,7 @@ interface SwipableExpenseRowProps {
 }
 
 const SwipableExpenseRow: React.FC<SwipableExpenseRowProps> = ({ exp, payerName, onTap, onDeleteRequest }) => {
+  const fmt = useFmt();
   const [offsetX, setOffsetX] = useState(0);
   const [dragging, setDragging] = useState(false);
   const startX = useRef(0);
@@ -71,7 +73,7 @@ const SwipableExpenseRow: React.FC<SwipableExpenseRowProps> = ({ exp, payerName,
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onClick={() => { if (!didSwipe.current) onTap(); didSwipe.current = false; }}
-        className="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-4 cursor-pointer border border-transparent relative z-10"
+        className="bg-surface-card p-3 rounded-2xl shadow-sm flex items-center gap-4 cursor-pointer border border-transparent relative z-10"
       >
         <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center text-secondary shrink-0">
           <span className="material-symbols-outlined">{exp.type === 'BILL' ? 'receipt_long' : 'notes'}</span>
@@ -87,6 +89,7 @@ const SwipableExpenseRow: React.FC<SwipableExpenseRowProps> = ({ exp, payerName,
 };
 
 export const TripDetailPage: React.FC = () => {
+  const fmt = useFmt();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [trip, setTrip] = useState<Trip | null>(null);
@@ -94,6 +97,8 @@ export const TripDetailPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'expenses' | 'balances'>('expenses');
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const [sharing, setSharing] = useState(false);
 
   const loadData = async () => {
     const tripsData = await storage.get('ezbill_trips');
@@ -142,6 +147,18 @@ export const TripDetailPage: React.FC = () => {
 
   const expenseToDelete = expenses.find(e => e.id === confirmDeleteId);
 
+  const handleExportPDF = async () => {
+    if (!trip) return;
+    setExporting(true);
+    try { await exportTripToPDF(trip, expenses, debts); } finally { setExporting(false); }
+  };
+
+  const handleShare = async () => {
+    if (!trip) return;
+    setSharing(true);
+    try { await shareTripSummary(trip, expenses, debts); } finally { setSharing(false); }
+  };
+
   if (!trip) {
     return (
       <div className="min-h-screen bg-surface-page flex items-center justify-center flex-col">
@@ -152,16 +169,24 @@ export const TripDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-surface-page flex flex-col pb-safe">
+    <div className="min-h-screen bg-surface-page flex flex-col">
       {/* Header */}
-      <div className="bg-white px-6 pt-safe pb-8 rounded-b-[40px] shadow-sm relative z-10">
+      <div className="bg-surface-card px-6 pt-safe pb-8 rounded-b-[40px] shadow-sm relative z-10">
         <div className="flex items-center justify-between pt-4 pb-6">
           <button onClick={() => navigate(-1)} className="w-10 h-10 bg-surface-page rounded-full flex items-center justify-center text-text-main shadow-sm active:scale-95 transition-transform">
             <span className="material-symbols-outlined">arrow_back</span>
           </button>
-          <button onClick={() => navigate(`/expense/create?tripId=${trip.id}`)} className="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center shadow-sm active:scale-95 transition-transform font-bold">
-            <span className="material-symbols-outlined">add</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button onClick={handleShare} disabled={sharing} className="w-10 h-10 bg-surface-page text-primary rounded-full flex items-center justify-center shadow-sm active:scale-95 transition-transform disabled:opacity-50">
+              <span className="material-symbols-outlined text-[20px]">{sharing ? 'hourglass_empty' : 'share'}</span>
+            </button>
+            <button onClick={handleExportPDF} disabled={exporting} className="w-10 h-10 bg-surface-page text-primary rounded-full flex items-center justify-center shadow-sm active:scale-95 transition-transform disabled:opacity-50">
+              <span className="material-symbols-outlined text-[20px]">{exporting ? 'hourglass_empty' : 'picture_as_pdf'}</span>
+            </button>
+            <button onClick={() => navigate(`/expense/create?tripId=${trip.id}`)} className="w-10 h-10 bg-primary text-primary rounded-full flex items-center justify-center shadow-sm active:scale-95 transition-transform">
+              <span className="material-symbols-outlined">add</span>
+            </button>
+          </div>
         </div>
         <div>
           <h1 className="text-3xl font-extrabold text-text-main leading-tight mb-1">{trip.name} {trip.emoji}</h1>
@@ -179,10 +204,10 @@ export const TripDetailPage: React.FC = () => {
 
       {/* Tabs */}
       <div className="px-6 py-4 flex gap-4 mt-2">
-        <button onClick={() => setActiveTab('expenses')} className={`flex-1 py-3 text-sm font-bold rounded-2xl transition-all ${activeTab === 'expenses' ? 'bg-primary text-white shadow-md' : 'bg-white text-text-muted shadow-sm'}`}>
+        <button onClick={() => setActiveTab('expenses')} className={`flex-1 py-3 text-sm font-bold rounded-2xl transition-all ${activeTab === 'expenses' ? 'bg-primary text-white shadow-md' : 'bg-surface-card text-text-muted shadow-sm'}`}>
           Expenses
         </button>
-        <button onClick={() => setActiveTab('balances')} className={`flex-1 py-3 text-sm font-bold rounded-2xl transition-all ${activeTab === 'balances' ? 'bg-primary text-white shadow-md' : 'bg-white text-text-muted shadow-sm'}`}>
+        <button onClick={() => setActiveTab('balances')} className={`flex-1 py-3 text-sm font-bold rounded-2xl transition-all ${activeTab === 'balances' ? 'bg-primary text-white shadow-md' : 'bg-surface-card text-text-muted shadow-sm'}`}>
           Balances
         </button>
       </div>
@@ -220,18 +245,18 @@ export const TripDetailPage: React.FC = () => {
               </div>
             ) : (
               debts.map((debt, index) => (
-                <div key={index} className="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-3">
-                  <img src={debt.fromAvatar} alt={debt.fromName} className="w-10 h-10 rounded-full border border-secondary/20 object-cover" />
+                <div key={index} className="bg-surface-card p-3 rounded-2xl shadow-sm flex items-center gap-3">
+                  <img src={debt.fromAvatar} alt={debt.fromName} className="w-10 h-10 rounded-full border border-[#ffd1dc] object-cover" />
                   <div className="flex-1 flex flex-col items-center">
                     <p className="text-[10px] text-text-muted font-bold tracking-wide uppercase">Owes</p>
                     <div className="w-full flex items-center gap-2 my-1">
                       <div className="h-px bg-secondary/20 flex-1 relative">
-                        <span className="material-symbols-outlined text-[14px] text-secondary absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-1">arrow_forward</span>
+                        <span className="material-symbols-outlined text-[14px] btn-arrow-forward text-secondary absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface-card px-1">arrow_forward</span>
                       </div>
                     </div>
                     <p className="font-black text-primary">{fmt(debt.amount)}</p>
                   </div>
-                  <img src={debt.toAvatar} alt={debt.toName} className="w-10 h-10 rounded-full border border-secondary/20 object-cover" />
+                  <img src={debt.toAvatar} alt={debt.toName} className="w-10 h-10 rounded-full border border-[#ffd1dc] object-cover" />
                 </div>
               ))
             )}
@@ -248,7 +273,7 @@ export const TripDetailPage: React.FC = () => {
       {confirmDeleteId && expenseToDelete && (
         <div className="fixed inset-0 z-[200] flex items-end justify-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setConfirmDeleteId(null)} />
-          <div className="relative bg-white rounded-t-[32px] w-full px-6 pt-4 pb-10 animate-in slide-in-from-bottom-full duration-300">
+          <div className="relative bg-surface-card rounded-t-[32px] w-full px-6 pt-4 pb-10 animate-in slide-in-from-bottom-full duration-300">
             <div className="w-12 h-1.5 bg-secondary/20 rounded-full mx-auto mb-6" />
             <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="material-symbols-outlined text-red-500 text-2xl">delete_forever</span>

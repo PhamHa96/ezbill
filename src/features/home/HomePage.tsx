@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { fmt } from "../../utils/helper";
+import { useFmt } from "../../hooks/useFmt";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import type { Trip } from "../../types";
 import { storage } from "../../lib/storage";
@@ -7,6 +8,8 @@ import type { Expense } from "../../services/expense.model";
 import { ExpenseDetailModal } from "../../components/ui/ExpenseDetailModal";
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [latestTrip, setLatestTrip] = useState<Trip | null>(null);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
@@ -28,7 +31,7 @@ const HomePage: React.FC = () => {
       }
     };
     loadData();
-  }, []);
+  }, [location.key]);
 
   return (
     <div className="min-h-screen flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -51,7 +54,7 @@ const HomePage: React.FC = () => {
                 arrow_upward
               </span>
             </div>
-            <span className="text-[11px] tracking-widest font-bold text-gray-400">
+            <span className="text-[11px] tracking-widest font-bold text-text-muted">
               TO PAY
             </span>
           </div>
@@ -88,16 +91,7 @@ const HomePage: React.FC = () => {
           </div>
 
           <div className="px-6">
-            <div className="rounded-[32px] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.06)] overflow-hidden">
-              <div className="relative w-full aspect-[16/8] overflow-hidden rounded-t-[32px]">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#9ED3E1] to-[#6FA7B5]" />
-                <div className="absolute bottom-3 left-4">
-                  <span className="bg-white px-4 py-1 rounded-full text-[10px] font-bold tracking-wide shadow-sm text-[#FF7DA1]">
-                    ACTIVE
-                  </span>
-                </div>
-              </div>
-
+            <div className="rounded-[32px] bg-[#ffc6d469] shadow-[0_12px_40px_rgba(0,0,0,0.06)] overflow-hidden cursor-pointer active:scale-[0.98] transition-transform" onClick={() => navigate(`/trips/${latestTrip.id}`)}>
               <div className="px-6 pt-5 pb-6">
                 <p className="text-xl font-extrabold text-text-main mb-4">
                   {latestTrip.name} {latestTrip.emoji}
@@ -163,6 +157,7 @@ const HomePage: React.FC = () => {
 };
 
 const ExpenseItem: React.FC<{ expense: Expense }> = ({ expense }) => {
+  const fmt = useFmt();
   const isPaidByMe = expense.payerId === 'u1';
   // Get amount this user owes (or is owed if they paid)
   const mySplit = expense.participants.find(p => p.userId === 'u1');
@@ -175,18 +170,18 @@ const ExpenseItem: React.FC<{ expense: Expense }> = ({ expense }) => {
   const getColorClass = () => {
     return expense.type === "BILL"
       ? "bg-[#FFE5EC] text-primary border-[#FFD1DC]"
-      : "bg-[#FFF4D6] text-[#F59E0B] border-[#FFE8B6]";
+      : "bg-[#FFF4D6] text-[#F59E0B] border-[#ffd1dc]";
   };
 
   return (
-    <div className="flex items-center gap-4 p-4 rounded-3xl bg-white shadow-card border border-white transition-all hover:scale-[1.02] cursor-pointer">
+    <div className="flex items-center gap-4 p-4 rounded-3xl bg-white shadow-card border border-none transition-all hover:scale-[1.02] cursor-pointer">
       <div
         className={`h-12 w-12 rounded-full flex items-center justify-center shrink-0 border bg-pink-100 ${getColorClass()}`}
       >
-        <span className="material-symbols-outlined text-xl">{getIcon()}</span>
+        <span className="material-symbols-outlined text-xl text-text-muted">{getIcon()}</span>
       </div>
       <div className="flex-1 overflow-hidden">
-        <p className="font-bold text-sm truncate text-text-main">
+        <p className="font-bold text-sm truncate text-text-muted">
           {expense.description || (expense.type === 'BILL' ? 'Itemized Bill' : 'Quick Note')}
         </p>
         <p className="text-xs font-semibold text-text-muted mt-0.5">
@@ -194,7 +189,7 @@ const ExpenseItem: React.FC<{ expense: Expense }> = ({ expense }) => {
         </p>
       </div>
       <div className="text-right shrink-0">
-        <p className="font-bold text-sm text-text-main">
+        <p className="font-bold text-sm text-text-muted">
           {fmt(expense.totalAmount)}
         </p>
         {myAmount > 0 && !isPaidByMe && (

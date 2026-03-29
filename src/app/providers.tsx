@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
 import { useAuthStore } from '../features/auth/auth.store';
+import { useAppStore } from '../stores/appStore';
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
-  const hydrate = useAuthStore((s) => s.hydrate);
+  const hydrateAuth = useAuthStore((s) => s.hydrate);
+  const hydrateApp = useAppStore((s) => s.hydrate);
 
   useEffect(() => {
-    hydrate();
-  }, [hydrate]);
+    hydrateAuth();
+    hydrateApp();
+  }, [hydrateAuth, hydrateApp]);
 
   return <>{children}</>;
 }

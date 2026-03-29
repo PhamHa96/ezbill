@@ -40,7 +40,7 @@ export const LoginPage: React.FC = () => {
       <div className="flex flex-col items-center mb-10">
         <div className="relative mb-4">
           <div className="text-[120px] leading-none select-none">🐱</div>
-          <div className="absolute -bottom-2 -right-4 bg-white border-2 border-primary px-4 py-2 rounded-2xl shadow-lg transform rotate-6">
+          <div className="absolute -bottom-2 -right-4 bg-white border-2 border-[#ffd1dc] px-4 py-2 rounded-2xl shadow-lg transform rotate-6">
             <p className="text-primary font-extrabold text-sm whitespace-nowrap">
               Welcome ! ✨
             </p>
@@ -62,12 +62,12 @@ export const LoginPage: React.FC = () => {
             Email Address
           </label>
           <div className="relative flex items-center">
-            <span className="material-symbols-outlined absolute left-4 text-primary/50">
+            <span className="material-symbols-outlined absolute left-4 text-[#FF7DA1] ">
               <IoMdMail />
             </span>
             <input
-              className="w-full pl-12 pr-4 py-4 bg-background-soft border-[#ffd1dc] border-2 rounded-2xl
-                         focus:ring-2 focus:ring-primary focus:border-primary transition-all
+              className="w-full bg-pink-50 pl-12 pr-4 py-4 bg-background-soft border-2 border-transparent rounded-2xl
+                         focus:border-[#FF7DA1] transition-all
                          outline-none placeholder:text-gray-400 font-medium"
               placeholder="hello@bestie.com"
               type="email"
@@ -84,12 +84,12 @@ export const LoginPage: React.FC = () => {
             Password
           </label>
           <div className="relative flex items-center">
-            <span className="material-symbols-outlined absolute left-4 text-primary/50">
+            <span className="material-symbols-outlined absolute left-4 text-[#FF7DA1] ">
               <FaLock />
             </span>
             <input
-              className="w-full pl-12 pr-12 py-4 bg-background-soft border-[#ffd1dc] border-2 rounded-2xl
-                         focus:ring-2 focus:ring-primary focus:border-primary transition-all
+              className="w-full bg-pink-50 pl-12 pr-12 py-4 bg-background-soft border-2 border-transparent rounded-2xl
+                         focus:border-[#FF7DA1] transition-all
                          outline-none placeholder:text-gray-400 font-medium"
               placeholder="••••••••"
               type={showPassword ? "text" : "password"}

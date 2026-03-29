@@ -118,7 +118,7 @@ export const CreateExpensePage: React.FC = () => {
       <div className="flex items-center justify-between px-6 pt-6 pb-4">
         <button
           onClick={() => navigate(-1)}
-          className="w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-soft transition-all hover:scale-105"
+          className="w-10 h-10 rounded-full flex items-center justify-center bg-surface-card shadow-soft transition-all hover:scale-105"
         >
           <span className="material-symbols-outlined text-primary text-[20px]">arrow_back</span>
         </button>
@@ -131,7 +131,7 @@ export const CreateExpensePage: React.FC = () => {
         <ParticipantSelector />
 
         {/* General Inputs */}
-        <div className="mb-6 bg-white p-5 rounded-3xl shadow-soft">
+        <div className="mb-6 bg-surface-card p-5 rounded-3xl shadow-soft">
           <div className="mb-4">
             <label className="text-[11px] font-bold text-text-muted tracking-widest uppercase mb-2 block">
               What was this for?
@@ -182,7 +182,7 @@ export const CreateExpensePage: React.FC = () => {
       </div>
 
       {/* Save Button — fixed at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 px-6 pb-10 mb-10">
+      <div className="fixed bottom-0 left-0 right-0 z-20 px-6 pb-10 save-ex-btn">
         <Button onClick={handleSaveClick}>
           Save Expense
         </Button>

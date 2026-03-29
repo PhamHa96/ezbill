@@ -74,7 +74,7 @@ export const TripAssignmentSheet: React.FC<TripAssignmentSheetProps> = ({ onClos
                   value={newTripName}
                   onChange={e => setNewTripName(e.target.value)}
                   placeholder="e.g. Summer 2026"
-                  className="w-full bg-white border-2 border-primary/20 rounded-2xl px-4 py-4 text-lg font-bold text-text-main focus:outline-none focus:border-primary mb-6"
+                  className="w-full bg-surface-card border-2 border-[#ffd1dc] rounded-2xl px-4 py-4 text-lg font-bold text-text-main focus:outline-none focus:border-primary mb-6"
                 />
                 <button
                   onClick={handleCreateNew}
@@ -96,7 +96,7 @@ export const TripAssignmentSheet: React.FC<TripAssignmentSheetProps> = ({ onClos
 
                 <button
                   onClick={() => setIsCreating(true)}
-                  className="w-full mb-4 p-4 rounded-2xl bg-white border-2 border-dashed border-primary/40 flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors text-primary font-bold active:scale-95"
+                  className="w-full mb-4 p-4 rounded-2xl bg-surface-card border-2 border-dashed border-[#ffd1dc] flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors text-primary font-bold active:scale-95"
                 >
                   <span className="material-symbols-outlined">add_circle</span>
                   Create New Trip
@@ -110,7 +110,7 @@ export const TripAssignmentSheet: React.FC<TripAssignmentSheetProps> = ({ onClos
                         <button
                           key={trip.id}
                           onClick={() => onAssignToTrip(trip.id)}
-                          className="w-full flex items-center gap-4 p-3 rounded-2xl bg-white border border-secondary/10 hover:border-primary/50 transition-colors text-left active:scale-95 shadow-sm"
+                          className="w-full flex items-center gap-4 p-3 rounded-2xl bg-surface-card border border-[#ffd1dc] hover:border-primary transition-colors text-left active:scale-95 shadow-sm"
                         >
                           <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-xl shrink-0">
                             {trip.emoji}
@@ -126,7 +126,7 @@ export const TripAssignmentSheet: React.FC<TripAssignmentSheetProps> = ({ onClos
                   </div>
                 )}
 
-                <div className="my-6 border-b border-secondary/10" />
+                <div className="my-6 border-b border-[#ffd1dc]" />
 
                 <button
                   onClick={() => onAssignToTrip(null)}

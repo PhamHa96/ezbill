@@ -73,7 +73,13 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
 
   setBillTotal: (amount) => set({ totalAmount: amount }),
 
-  setDiscountInfo: (beforeDiscountTotal, actualTotal) => set({ beforeDiscountTotal, actualTotal }),
+  setDiscountInfo: (beforeDiscountTotal, actualTotal) => {
+    // Items were already added with scaled prices via addItem (ratio applied in scan handler)
+    // Just store the info and update totalAmount to the real paid amount
+    const { items, participants } = get();
+    const newParticipants = items.length > 0 ? recalculateGlobalSplitsFromItems(items, participants) : participants;
+    set({ beforeDiscountTotal, actualTotal, totalAmount: actualTotal, participants: newParticipants });
+  },
 
   addItem: (item) => {
     const itemTotal = item.price * item.quantity;
@@ -88,8 +94,6 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
     const newItem: BillItem = { ...item, id: Math.random().toString(36).substring(7), splits: finalSplits };
     const newItems = [...get().items, newItem];
     const newTotal = calculateTotalAmount(newItems);
-
-    // If we are in BILL mode, total participants splits = sum of item splits
     const newParticipants = recalculateGlobalSplitsFromItems(newItems, get().participants);
 
     set({ items: newItems, totalAmount: newTotal, participants: newParticipants });
@@ -98,18 +102,14 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
   updateItem: (id, updates) => {
     const newItems = get().items.map(i => i.id === id ? { ...i, ...updates } : i);
     const newTotal = calculateTotalAmount(newItems);
-
     const newParticipants = recalculateGlobalSplitsFromItems(newItems, get().participants);
-
     set({ items: newItems, totalAmount: newTotal, participants: newParticipants });
   },
 
   removeItem: (id) => {
     const newItems = get().items.filter(i => i.id !== id);
     const newTotal = calculateTotalAmount(newItems);
-
     const newParticipants = recalculateGlobalSplitsFromItems(newItems, get().participants);
-
     set({ items: newItems, totalAmount: newTotal, participants: newParticipants });
   },
 
@@ -188,7 +188,9 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
       return { ...item, splits: finalSplits as any };
     });
 
-    const newTotal = calculateTotalAmount(newItems);
+    const itemsSum = calculateTotalAmount(newItems);
+    const { actualTotal } = get();
+    const newTotal = actualTotal ?? itemsSum;
     const newParticipants = recalculateGlobalSplitsFromItems(newItems, get().participants);
 
     set({ items: newItems, totalAmount: newTotal, participants: newParticipants });

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useFmt } from '../../hooks/useFmt';
 
 interface Friend {
   id: string;
@@ -70,9 +71,9 @@ const MOCK_SEARCH_RESULTS: Friend[] = [
   },
 ];
 
-const fmt = (n: number) => Math.round(Math.abs(n)).toLocaleString();
 
 export const FriendsPage: React.FC = () => {
+  const fmt = useFmt();
   const [friends, setFriends] = useState<Friend[]>(MOCK_FRIENDS);
   const [showAddSheet, setShowAddSheet] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -119,7 +120,7 @@ export const FriendsPage: React.FC = () => {
       {/* Header */}
       <div className="px-6 pt-6 pb-4 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-extrabold text-text-main">Friends 👥</h1>
+          <h1 className="text-3xl font-extrabold text-text-main">Friends</h1>
           <p className="text-text-muted text-sm font-semibold mt-0.5">
             {confirmedFriends.length} friends · {pendingReceived.length} pending
           </p>
@@ -141,8 +142,8 @@ export const FriendsPage: React.FC = () => {
             </h2>
             <div className="flex flex-col gap-3">
               {pendingReceived.map(f => (
-                <div key={f.id} className="bg-white rounded-3xl p-4 shadow-soft flex items-center gap-3">
-                  <img src={f.avatarUrl} alt={f.name} className="w-12 h-12 rounded-full object-cover border-2 border-primary/20" />
+                <div key={f.id} className="bg-surface-card rounded-3xl p-4 shadow-soft flex items-center gap-3">
+                  <img src={f.avatarUrl} alt={f.name} className="w-12 h-12 rounded-full object-cover border-2 border-[#ffd1dc]" />
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-text-main text-sm truncate">{f.name}</p>
                     <p className="text-xs text-text-muted">@{f.username}</p>
@@ -183,7 +184,7 @@ export const FriendsPage: React.FC = () => {
           ) : (
             <div className="flex flex-col gap-3">
               {confirmedFriends.map(f => (
-                <div key={f.id} className="bg-white rounded-3xl p-4 shadow-soft">
+                <div key={f.id} className="bg-surface-card rounded-3xl p-4 shadow-soft">
                   <div className="flex items-center gap-3">
                     <div className="relative">
                       <img src={f.avatarUrl} alt={f.name} className="w-12 h-12 rounded-full object-cover" />
@@ -235,7 +236,7 @@ export const FriendsPage: React.FC = () => {
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => { setShowAddSheet(false); setSearchQuery(''); setSearchResults([]); setHasSearched(false); }}
           />
-          <div className="relative bg-white rounded-t-[32px] w-full px-6 pt-4 pb-10 animate-in slide-in-from-bottom-full duration-300">
+          <div className="relative bg-surface-card rounded-t-[32px] w-full px-6 pt-4 pb-10 animate-in slide-in-from-bottom-full duration-300">
             <div className="w-12 h-1.5 bg-secondary/20 rounded-full mx-auto mb-6" />
 
             <h2 className="text-xl font-extrabold text-text-main mb-1">Add Friend</h2>
@@ -243,7 +244,7 @@ export const FriendsPage: React.FC = () => {
 
             {/* Search input */}
             <div className="flex gap-2 mb-6">
-              <div className="flex-1 flex items-center gap-2 bg-surface-page rounded-2xl px-4 py-3 border border-secondary/20">
+              <div className="flex-1 flex items-center gap-2 bg-surface-page rounded-2xl px-4 py-3 border border-[#ffd1dc]">
                 <span className="material-symbols-outlined text-text-muted text-[20px]">search</span>
                 <input
                   autoFocus

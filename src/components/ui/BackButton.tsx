@@ -8,7 +8,7 @@ export function BackButton() {
     <div className="p-6">
       <button
         onClick={() => navigate(-1)}
-        className="size-10 flex items-center justify-center bg-white rounded-full text-primary shadow-sm active:scale-90 transition-transform"
+        className="size-10 flex items-center justify-center bg-surface-card rounded-full text-primary shadow-sm active:scale-90 transition-transform"
       >
         <span className="material-symbols-outlined text-[20px] text-[#FF7DA1]">
           <IoChevronBack />

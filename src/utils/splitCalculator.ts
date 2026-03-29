@@ -47,17 +47,17 @@ export const recalculateSplits = <T extends SplitBase>(totalAmount: number, spli
 };
 
 export const recalculateGlobalSplitsFromItems = (items: BillItem[], participants: Participant[]): Participant[] => {
-   const participantTotals = new Map<string, number>();
-   
-   items.forEach(item => {
-      item.splits.forEach(split => {
-         const current = participantTotals.get(split.userId) || 0;
-         participantTotals.set(split.userId, current + split.calculatedAmount);
-      })
-   });
+  const participantTotals = new Map<string, number>();
 
-   return participants.map(p => ({
-     ...p,
-     calculatedAmount: participantTotals.get(p.userId) || 0
-   }));
+  items.forEach(item => {
+    item.splits.forEach(split => {
+      const current = participantTotals.get(split.userId) || 0;
+      participantTotals.set(split.userId, current + split.calculatedAmount);
+    });
+  });
+
+  return participants.map(p => ({
+    ...p,
+    calculatedAmount: participantTotals.get(p.userId) || 0,
+  }));
 };
